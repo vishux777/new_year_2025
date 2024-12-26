@@ -53,6 +53,33 @@
             animation: explode 1s ease-out forwards;
         }
 
+        .credits {
+            position: fixed;
+            bottom: 20px;
+            color: #fff;
+            font-size: 1.2em;
+            text-align: center;
+            width: 100%;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        .music-control {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 10px 20px;
+            border-radius: 20px;
+            color: white;
+            cursor: pointer;
+            z-index: 2;
+            transition: background 0.3s;
+        }
+
+        .music-control:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
         @keyframes glow {
             from {
                 text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #e60073;
@@ -80,13 +107,45 @@
     </style>
 </head>
 <body>
+    <div class="music-control" onclick="toggleMusic()">🔊 Pause Music</div>
     <div class="container">
         <h1>HAPPY NEW YEAR</h1>
         <div class="year">2025</div>
         <div class="countdown">Countdown: <span id="timer"></span></div>
     </div>
+    <div class="credits">DEVELOPED BY VK GROUP</div>
+    
+    <audio id="bgMusic" loop autoplay>
+        <source src="https://cdn.pixabay.com/download/audio/2022/12/15/audio_2b441071f3.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
 
     <script>
+        // Audio control
+        const audio = document.getElementById('bgMusic');
+        const musicControl = document.querySelector('.music-control');
+        let isPlaying = true;  // Changed to true since music autoplays
+
+        // Start playing as soon as possible
+        window.addEventListener('load', () => {
+            audio.play().catch(error => {
+                // Handle autoplay restriction if browser blocks it
+                isPlaying = false;
+                musicControl.textContent = '🔇 Play Music';
+            });
+        });
+
+        function toggleMusic() {
+            if (isPlaying) {
+                audio.pause();
+                musicControl.textContent = '🔇 Play Music';
+            } else {
+                audio.play();
+                musicControl.textContent = '🔊 Pause Music';
+            }
+            isPlaying = !isPlaying;
+        }
+
         // Fireworks effect
         function createFirework() {
             const firework = document.createElement('div');
